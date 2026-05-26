@@ -138,7 +138,7 @@ export const getFile = async (req, res) => {
 
   const fileUrl = await createCloudFrontGetSignedUrl({
     key: `${id}${fileData.extension}`,
-    filename:fileData.name
+    filename: fileData.name,
   });
 
   return res.redirect(fileUrl);
@@ -190,7 +190,8 @@ export const deleteFile = async (req, res, next) => {
 };
 
 export const uploadInitiate = async (req, res, next) => {
-  const { fileData } = req.body;
+  const fileData = req.body;
+
   const parentDirId = fileData.parentDirId || req.user.rootDirId;
   try {
     const parentDirData = await Directory.findOne({
@@ -233,7 +234,7 @@ export const uploadInitiate = async (req, res, next) => {
     });
     res.json({ uploadSignedUrl, fileId: insertedFile.id });
   } catch (error) {
-    next(err);
+    next(error);
   }
 };
 
