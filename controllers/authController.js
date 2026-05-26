@@ -50,7 +50,7 @@ export const loginWithGoogle = async (req, res, next) => {
       `@userId:{${user.id}}`,
       {
         RETURN: [],
-      }
+      },
     );
 
     if (allSessions.total >= 2) {
@@ -76,6 +76,8 @@ export const loginWithGoogle = async (req, res, next) => {
       httpOnly: true,
       signed: true,
       maxAge: sessionExpiryTime,
+      sameSite: "none",
+      secure: true,
     });
 
     return res.json({ message: "logged in" });
@@ -96,7 +98,7 @@ export const loginWithGoogle = async (req, res, next) => {
         parentDirId: null,
         userId,
       },
-      { mongooseSession }
+      { mongooseSession },
     );
 
     await User.insertOne(
@@ -107,7 +109,7 @@ export const loginWithGoogle = async (req, res, next) => {
         picture,
         rootDirId,
       },
-      { mongooseSession }
+      { mongooseSession },
     );
 
     const sessionId = crypto.randomUUID();
@@ -124,6 +126,8 @@ export const loginWithGoogle = async (req, res, next) => {
       httpOnly: true,
       signed: true,
       maxAge: sessionExpiryTime,
+      sameSite: "none",
+      secure: true,
     });
 
     mongooseSession.commitTransaction();
